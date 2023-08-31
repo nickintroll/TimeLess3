@@ -1,0 +1,72 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="" style="padding-top: .4rem; background-color: white;">
+		<div class="slide-show-wrapper">
+			<div class="slide-show-item">
+				Pic 1
+			</div>
+			<div class="slide-show-item">
+				Pic 2
+			</div>
+			<div class="slide-show-item">
+				Pic 3
+			</div>
+			<div class="slide-show-item">
+				Pic 4
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="content-width" style="margin-top: 4rem;">
+		<h2>
+			Products
+		</h2>
+		<div class="big-prod-grid">
+			{% for prod in products|slice:4 %}
+			<div>
+				<a href="{{ prod.get_absolute_url }}">
+					<h4>
+
+							<div>
+								{{ prod }}
+							</div>
+						
+					</h4>
+					<div>
+						Here should be product description
+					</div>
+					<br>
+					<br>
+					<br>
+					<br>
+				</a>
+			</div>
+			{% endfor %}
+			<div class="span-two" style="text-align: center;">
+				More
+			</div>
+		</div>
+		
+		...
+	</div>
+
+	<div class="content-width" style="margin-top: 4rem;">
+		<div class="two-columns">
+			<div>
+				<h1 class="dark-color">
+					Contact us
+				</h1>
+				<div>
+					Leave your information in form below or get in touch through social network.
+				</div>
+			</div>
+			<div>
+				SOCIALS
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

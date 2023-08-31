@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="content-width">
+	<h2 class="dark-color">
+		<a href="{{ product.get_absolute_url }}">{{ product }}</a>
+	</h2>
+	
+	<div class="two-columns">
+		<div style="background-color: lightblue; height: 10rem; padding: 1rem;">
+			Pic
+		</div>
+		<div style="padding: 0rem 1rem;">
+			<h4 class="dark-color">
+				Choose option for you
+			</h4>
+			<div>
+				some choosing of parametsrs
+			</div>
+			
+		</div>
+		<div style="padding-top: .4rem;">
+			here is big description
+		</div>
+		<div>
+			<div style="float: right;">
+				Buy button
+			</div>
+		</div>
+		
+	</div>
+	<div>
+		from save category:
+		{% for prod in  product.category.products.all|slice:4 %}
+		<div>
+			<a href="{{ prod.get_absolute_url }}">{{ prod }}</a>
+		</div>
+		{% endfor %}
+	
+	</div>
+</div>
+
+{% endblock %}

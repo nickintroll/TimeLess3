@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+
+body{
+	background-color: rgb(246, 246, 248);
+	color: rgb(104, 104, 104);
+}
+
+a{
+	color: inherit;
+	text-decoration: none;
+}
+
+*{
+	margin: 0;
+	padding: 0;
+	font-family: 'Poppins', sans-serif;
+}
+
+.dark-color{
+	color: black;
+}
+
+.debug, .debug *{
+	border: 1px solid rgb(99, 160, 180);
+	background-color: rgba(124, 155, 180, 0.2);
+}
+
+.header{
+	margin-top: .6rem;
+	background-color: white;
+	padding: .7rem;
+}
+
+.header-inner{
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.content-width{
+	max-width: 1300px;
+	margin: 0 auto;
+}
+
+.header-categories{
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+
+}
+
+.four-columns, .two-columns{
+	display: grid;
+	
+}
+.four-columns{
+	grid-template-columns: repeat(4, 1fr);
+}
+.two-columns{
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.span-three{
+	grid-column: span 3;
+}
+.span-two{
+	grid-column: span 2;
+}
+
+.centered-svg{
+	/* border: 1px solid red; */
+	position: relative;
+	display: inline-block;
+	min-width: 15px !important;
+	height: 15px;
+	margin-right: .5rem;
+}
+.centered-svg > svg{
+	top: -.1rem;
+	position: absolute;
+}
+
+
+.slide-show-wrapper{
+	overflow: auto;
+	white-space: nowrap;
+}
+
+.slide-show-item{
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	height: 15rem;
+	width: 50rem;
+	background: linear-gradient(45deg, gray, transparent);
+	border: 1px solid black;
+}
+
+.big-prod-grid{
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+
+	background-color: transparent;
+	gap: .6rem;
+}
+
+.big-prod-grid > div{
+	color: white;
+	background-color: rgb(17, 17, 17);
+	padding: 1rem;
+}
+
+.white-block{
+	background-color: white;
+	padding: .5rem;
+}
+.push{
+	margin: .5rem;
+}
+
+@media only screen and (max-width: 800px) {
+	.content-width{
+		padding: 1rem;
+	}
+
+	.split-grid{
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+}
+
+@media only screen and (max-width: 500px) {
+	.destroy-grid{
+		display: block;
+	}
+}
