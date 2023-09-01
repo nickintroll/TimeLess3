@@ -3,7 +3,7 @@ from shop.models import Category, Product
 
 
 def _render(request, template, data):
-	data['all_categories'] = Category.published.all()
+	data['all_categories'] = Category.published.all().filter(parent_category=None)
 	return render(request, template, data)
 
 

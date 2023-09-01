@@ -19,9 +19,14 @@
 				</a>
 			</div>
 			<div class="header-categories span-three">
-				{% for cat in all_categories|slice:5 %}
+				<div>
+					<a href="{% url 'shop:shop_main' %}">
+						All products
+					</a>
+				</div>
+				{% for cat in all_categories|slice:4 %}
 					<div>
-						<a href="{{ cat.get_absolute_url }}">{{ cat }}</a>
+						<a href="{{ cat.get_absolute_url }}">{{ cat|truncatechars:14 }}</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -37,5 +42,17 @@
 		{% endblock %}
 	</div>
 
+
+	<div class="bottom-page">
+		<div class="content-width">
+			<h2>
+				Pages closer
+			</h2>
+			<div>
+				Here might be some licese info, or contact information
+			</div>
+	
+		</div>
+	</div>
 </body>
 </html>

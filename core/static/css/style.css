@@ -9,6 +9,7 @@ body{
 a{
 	color: inherit;
 	text-decoration: none;
+	color: rgb(55, 55, 55);
 }
 
 *{
@@ -21,6 +22,10 @@ a{
 	color: black;
 }
 
+h1, h2, h3, h4, h5{
+	color: black;
+}
+
 .debug, .debug *{
 	border: 1px solid rgb(99, 160, 180);
 	background-color: rgba(124, 155, 180, 0.2);
@@ -30,6 +35,14 @@ a{
 	margin-top: .6rem;
 	background-color: white;
 	padding: .7rem;
+}
+
+.inline-bastards{
+
+}
+.inline-bastards > div{
+	display: inline-block;
+	vertical-align: top;
 }
 
 .header-inner{
@@ -48,12 +61,14 @@ a{
 
 }
 
-.four-columns, .two-columns{
+.four-columns, .two-columns, .five-columns{
 	display: grid;
-	
 }
 .four-columns{
 	grid-template-columns: repeat(4, 1fr);
+}
+.five-columns{
+	grid-template-columns: repeat(5, 1fr);
 }
 .two-columns{
 	grid-template-columns: repeat(2, 1fr);
@@ -65,6 +80,10 @@ a{
 .span-two{
 	grid-column: span 2;
 }
+.span-four{
+	grid-column: span 4;
+}
+
 
 .centered-svg{
 	/* border: 1px solid red; */
@@ -97,7 +116,7 @@ a{
 
 .big-prod-grid{
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 
 	background-color: transparent;
 	gap: .6rem;
@@ -117,6 +136,44 @@ a{
 	margin: .5rem;
 }
 
+.image-fit-wrapper{
+	padding: .5rem;
+}
+.image-fit{
+	max-width: 100%;
+}
+
+.bottom-page{
+	margin-top: 4rem;
+	/* border-top: 1px solid white; */
+	background-color: rgb(0, 0, 0, 0.05);
+	padding-top: 2rem;
+	padding-bottom: 3rem;
+}
+
+.float-right{
+	float: right;
+	height: 0px;
+	line-height: 0px;
+	
+}
+
+.cart-grid{
+	background-color: rgb(246, 246, 248);
+	padding: .3rem 1rem;
+	grid-gap: 0.2rem;
+}
+
+.cart-grid > div{
+	background-color: white;
+
+	padding: .2rem .7rem;
+}
+
+.highlight{
+	border: 1px solid black;
+}
+
 @media only screen and (max-width: 800px) {
 	.content-width{
 		padding: 1rem;
@@ -133,3 +190,5 @@ a{
 		display: block;
 	}
 }
+
+

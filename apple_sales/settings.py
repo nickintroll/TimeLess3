@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,8 +17,17 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+# media
+MEDIA_URL = '/fls/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+# static
+STATIC_URL = 'static/'
+
+CART_SESSION_ID = 'cart_session'
+
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,6 +39,7 @@ INSTALLED_APPS = [
     # my_apps
     'core',
     'shop',
+	'cart', 
 ]
 
 MIDDLEWARE = [
@@ -66,10 +77,17 @@ WSGI_APPLICATION = 'apple_sales.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
+		'NAME': 'apple_sales',
+		'USER': 'apple_sales_user',
+		'PASSWORD': 'autodetails8W7orkA6llThe2Time',
+		'HOST': 'localhost'
+	}
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
@@ -102,12 +120,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

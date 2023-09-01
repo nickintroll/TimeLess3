@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-width" style="margin-top: 4rem;">
+	<h2>
+		Your shop cart
+	</h2>
+	<div class="five-columns cart-grid">
+		<div>
+			<h5>
+				name
+			</h5>
+		</div>
+		<div>
+			<h5>
+				price
+			</h5>
+		</div>
+		<div> 
+			<h5>
+				quantity
+			</h5>
+		</div>
+		<div class="two-columns">
+			<h5>
+				controlls
+			</h5>
+		</div>
+		<div>
+			<h5>
+				total price
+			</h5>
+		</div>
+
+		{% for item in cart %}
+		
+			{% with item.product as prod %}
+				<div>
+						<a href="{{ prod.get_absolute_url }}">{{ prod }}</a>
+				</div>
+				<div>
+					*price*
+				</div>
+				<div> 
+					{{ item.quantity }}
+				</div>
+				<div class="two-columns">
+					<div class="highlight">
+						add
+					</div>
+					<div class="highlight">
+						remove
+					</div>
+				</div>
+				<div>
+					*total price*
+				</div>
+			{% endwith %}
+		{% empty %}
+			No items choosen yet
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

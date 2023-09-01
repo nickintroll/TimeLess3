@@ -14,3 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = (
         {'slug': ('name', )}
     )
+
+@admin.register(models.Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('product', 'file', 'is_primary')

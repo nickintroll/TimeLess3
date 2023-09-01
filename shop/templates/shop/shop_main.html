@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}  
+	<div class="content-width" style="margin-top: 1rem;">
+		<div class="float-right">
+			<a href="{% url 'cart:cart_page' %}">My cart</a>
+		</div>
+		<div class="inline-bastards">
+			<div class="push">
+				<a href="{% url 'shop:shop_main' %}">
+					All products
+				</a>
+				*
+			</div>
+
+			{% for cat in categories %}
+				{% if not cat.parent_category %}
+					<div class="push">
+						<a href="{{ cat.get_absolute_url }}">
+							{{ cat }}
+						</a>
+						=
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+
+		{% if category %}
+			<h2>
+				<a href="{{ category.get_absolute_url }}">{{ category }}</a>
+			</h2>
+			<div>
+				{% for subcat in sub_categories %}
+				<a href="{{ subcat.get_absolute_url }} ">| {{ subcat }} </a>
+				{% endfor %}
+			</div>
+		{% else %}
+			<h3>
+				All products
+			</h3>
+		{% endif %}
+		<div>
+			<form method="POST">
+				<div class="inline-bastards">
+					<div>
+						{{ search_form.name }}
+					</div>
+					<div>
+						{% csrf_token %}
+						<input type="submit" value="search">
+					</div>
+				</div>
+			</form>
+			
+		</div>
+		<div>
+			<br>
+			<div class="four-columns destroy-grid split-grid">
+				{% for prod in products %}
+					<div class="white-block push">
+						<a href="{{ prod.get_absolute_url }}">
+							{{ prod }}
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

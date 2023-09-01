@@ -3,32 +3,45 @@
 
 {% block content %}
 <div class="content-width">
+	<div class="product_path">
+		{% for item in product.get_path_to_prod %}
+			<a href="{{ item.get_absolute_url }}">
+				> {{ item.name }} 
+			</a>
+		{% endfor %}
+	</div>
+	
+
 	<h2 class="dark-color">
 		<a href="{{ product.get_absolute_url }}">{{ product }}</a>
 	</h2>
 	
 	<div class="two-columns">
-		<div style="background-color: lightblue; height: 10rem; padding: 1rem;">
-			Pic
+		<div class="image-fit-wrapper highlight">
+			<img src="{{ product.images.all.0.file.url }}" alt="" class="image-fit">
 		</div>
-		<div style="padding: 0rem 1rem;">
+		<div class="white-block">
 			<h4 class="dark-color">
 				Choose option for you
 			</h4>
 			<div>
 				some choosing of parametsrs
 			</div>
-			
 		</div>
 		<div style="padding-top: .4rem;">
 			here is big description
 		</div>
 		<div>
-			<div style="float: right;">
-				Buy button
+			<div class="float-right">
+				<form action="{% url 'cart:cart_add' product.id %}" method="post">
+					{{ add_form.quantity }}
+					{% csrf_token %}
+					<input type="submit" value="Buy">
+	
+				</form>
 			</div>
 		</div>
-		
+
 	</div>
 	<div>
 		from save category:
