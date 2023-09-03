@@ -15,12 +15,13 @@ class Cart(object):
 		self.cart = cart
 	
 	def add(self, product, quantity=1, override_quantity=False):
+
 		product_id = str(product.id)
 
 		if not product_id in self.cart:
 			self.cart[product_id] = {
 				'quantity': 0,
-				# 'price': str(product.price)
+				'price': str(product.price)
 			}
 		
 		if override_quantity:
@@ -35,7 +36,7 @@ class Cart(object):
 	
 
 	def remove(self, product):
-		product_id = str(product_id)
+		product_id = str(product.id)
 		if product_id in self.cart:
 			del self.cart[product_id]
 		self.save()
@@ -51,16 +52,16 @@ class Cart(object):
 		
 
 		for item in cart.values():
-			# item['price'] = Decimal(item['product'].price)
-			# item['total_price'] = item['price'] * item['quantity']
+			item['price'] = Decimal(item['product'].price)
+			item['total_price'] = item['price'] * item['quantity']
 			yield item
 
 	def __len__(self):
 		return sum([i['quantity'] for i in self.cart.values()])
 	
 	
-	# def get_total_price(self):
-	# 	return sum([i['quantity'] * Decimal(i['price']) for i in self.cart.values()])
+	def get_total_price(self):
+		return sum([i['quantity'] * Decimal(i['price']) for i in self.cart.values()])
 
 	def clear(self):
 		del self.session[settings.CART_SESSION_ID]

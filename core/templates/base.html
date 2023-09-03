@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div class="header">
-		<div class="content-width header-inner">
+		<div class="content-width header-inner split-grid">
 			<div>
 				<a href="{% url 'core:main_page' %}">
 					<span class="centered-svg">
@@ -18,19 +18,19 @@
 					Aplle sale
 				</a>
 			</div>
-			<div class="header-categories span-three">
-				<div>
+			<div class="header-categories span-three phone-hide">
+				<div class="">
 					<a href="{% url 'shop:shop_main' %}">
 						All products
 					</a>
 				</div>
 				{% for cat in all_categories|slice:4 %}
-					<div>
+					<div >
 						<a href="{{ cat.get_absolute_url }}">{{ cat|truncatechars:14 }}</a>
 					</div>
 				{% endfor %}
 			</div>
-			<div>
+			<div style="text-align: right;">
 				More
 			</div>	
 

@@ -8,6 +8,13 @@ from .forms import CartAddForm
 
 def cart_page(request):
 	cart = Cart(request)
+	for prod in cart:
+		prod['quantity_form'] = CartAddForm(initial={
+			'quantity': prod['quantity'],
+			'override': True
+		})
+
+
 	return _render(request, 'cart/cart.html', {'cart': cart})
 
 
@@ -16,8 +23,10 @@ def cart_add(request, product_id):
 	cart = Cart(request)
 	product = get_object_or_404(Product, id=product_id)
 	form = CartAddForm(request.POST)
+	
 	if form.is_valid():
 		cd = form.cleaned_data
+
 		cart.add(
 			product, 
 			quantity=cd['quantity'],

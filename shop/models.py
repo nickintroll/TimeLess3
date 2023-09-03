@@ -16,7 +16,7 @@ class Category(models.Model):
 		on_delete=models.DO_NOTHING,
 		blank=True, null=True)
 	
-	
+	special = models.BooleanField(default=False)
 	publish = models.BooleanField(default=True)
 	created = models.DateTimeField(auto_now_add=True)
 	order = models.IntegerField(default=1)
@@ -24,6 +24,9 @@ class Category(models.Model):
 	# managers
 	objects = models.Manager()
 	published = PublishedManager()
+
+	class Meta:
+		ordering = ('special', '-order', 'created', )
 
 	def get_absolute_url(self):
 		return reverse('shop:category', args=[self.slug, ])
@@ -50,25 +53,42 @@ class Category(models.Model):
 		ordering = ('-order', 'created', )
 
 
+	def get_path_to_cat(self):
+		if self.parent_category != None:
+			path = [self, ]
+			is_higher = True
+		
+			target = self.parent_category
+			while is_higher:	
+				path.append(target)
+				if target.parent_category != None and target.parent_category != False:
+					target = target.parent_category
+				else:
+					is_higher = False
+			return path[::-1]
+		return
+
+
 class Product(models.Model):
 	name = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=155, blank=True, null=True, unique=True)
 
 	category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
 
+	special = models.BooleanField(default=False)
 	publish = models.BooleanField(default=True)
 	created = models.DateTimeField(auto_now_add=True)
 	order = models.IntegerField(default=1)
 
 	description = models.TextField(null=True, blank=True)
+	price = models.DecimalField(max_digits=30, decimal_places=2, default=1)
 
 	# managers
 	objects = models.Manager()
 	published = PublishedManager()
-
 	
 	class Meta:
-		ordering = ('-order', 'created', )
+		ordering = ('special', '-order', 'created', )
 
 	def save(self, *args, count=1, **kwargs):
 
@@ -118,3 +138,43 @@ class Image(models.Model):
 
 	class Meta:
 		ordering = ('-is_primary', )
+	
+
+ORDER_STATUS_CHOICES = (
+	('Closed', 'closed'),
+	('Open', 'open'),
+	('Finished', 'finished'),
+	('Issue', 'issue')
+)
+
+class Order(models.Model):
+	contacts = models.TextField()
+	# HERE ALSO SHOULD BE SLUG
+	status = models.CharField(choices=ORDER_STATUS_CHOICES, max_length=20)
+	created = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ('-created', )
+	
+	def __str__(self):
+		return 'Order #' + str(self.id)
+	
+
+	def get_total_summ(self):
+		return sum(item.get_cost() for item in self.items.all())
+	
+
+class OrderItem(models.Model):
+	order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+	product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
+	price = models.DecimalField(max_digits=30, decimal_places=2)
+	quantity = models.IntegerField(default=1)
+
+	def __str__(self):
+		return 'OrderItem Order#' + str(self.order.id) + ' product#' + str(self.product.id)
+	
+	def get_cost(self):
+		return self.product.price * self.quantity
+
+
+

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="content-width" style="margin-top: 4rem;">
+		<h2>
+			Sending order
+		</h2>
+		<div style="margin-top: 2rem;">
+			<form method="post">
+				<h4>
+					Your contact information
+				</h4>
+				<div>
+					Please fill out your contact information so we can contact you about the order.
+				</div>
+				<div>
+					{{ form.contacts }}
+				</div>
+
+				<div>
+					{% csrf_token %}
+					<input type="submit" value="Send request">
+				</div>
+				
+			</form>
+		</div>
+	</div>
+{% endblock %}
