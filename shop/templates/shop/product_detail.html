@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block page_title %}
+	{{ product|title }}
+{% endblock %}
 
 
 {% block content %}
@@ -17,8 +23,12 @@
 	</h2>
 	
 	<div class="two-columns">
-		<div class="image-fit-wrapper highlight">
-			<img src="{{ product.images.all.0.file.url }}" alt="" class="image-fit">
+		<div class="image-fit-wrapper">
+			{% if product.get_primary_image %}
+				<img src="{{ product.get_primary_image.file.url }}" alt="">
+			{% else %}
+				<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+			{% endif %}
 		</div>
 		<div class="white-block">
 			<h4 class="dark-color">
@@ -28,6 +38,18 @@
 				some choosing of parametsrs
 			</div>
 		</div>
+		<div class="span-two">
+			<div class="five-columns">
+				{% for img in product.images.all %}
+					<div class="image-fit-wrapper">
+						<img src="{{ img.file.url }}" alt="">
+					</div>
+	
+				{% endfor %}
+			</div>	
+
+		</div>
+
 		<div style="padding-top: .4rem;">
 			here is big description
 		</div>

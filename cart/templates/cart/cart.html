@@ -1,6 +1,37 @@
 {% extends 'base.html' %}
 
+{% block page_title %}
+	Cart
+{% endblock %}
+
+
 {% block content %}
+
+{% if message %}
+	<div class="message-overall-back" id="message-target">
+		<div class="message-overall">
+			<h2>
+				Cart is first
+			</h2>
+			<br>
+			<div style="max-width: 50ch;">
+				Fill your cart with products to send order request
+			</div>
+
+			<div class="message-overall-closer" id="message-but-target">
+				Ok
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var message = document.getElementById('message-but-target');
+		message.onclick = function(e) {
+			document.getElementById('message-target').remove();
+		}
+	</script>
+{% endif %}
+
 <div class="content-width" style="margin-top: 4rem;">
 	<h2>
 		Your shopping cart
@@ -70,7 +101,9 @@
 				</div>
 			{% endwith %}
 		{% empty %}
-			No items choosen yet
+			<div class="span-five">
+				No items choosen yet
+			</div>
 		{% endfor %}
 		<div>
 			<h3>

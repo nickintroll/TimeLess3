@@ -1,29 +1,64 @@
 {% extends 'base.html' %}
 
+{% block page_title %}
+	Order AppleSales
+{% endblock %}
+
+
 {% block content %}
-
 	<div class="content-width" style="margin-top: 4rem;">
-		<h2>
-			Sending order
-		</h2>
-		<div style="margin-top: 2rem;">
-			<form method="post">
-				<h4>
-					Your contact information
-				</h4>
-				<div>
-					Please fill out your contact information so we can contact you about the order.
+		<div class="two-columns destroy-grid">
+			<div>
+				<h2>
+					Sending order
+				</h2>
+				{% if message %}
+					Field {{ message }} has an issue
+				{% endif %}
+		
+				<div style="margin-top: 2rem;">
+					<form method="post">
+						<h4>
+							Your contact information
+						</h4>
+						<div>
+							Please fill out your contact information so we can contact you about the order.
+						</div>
+						<div>
+							{{ form.contact_number }}
+						</div>
+						<div>
+							{{ form.contact_email }}
+						</div>
+		
+						<div>
+							{% csrf_token %}
+							<input type="submit" value="Send request">
+						</div>
+						
+					</form>
 				</div>
-				<div>
-					{{ form.contacts }}
+			</div>
+			<div>
+				{% for item in cart %}
+				<div class="white-block push">
+					<div class="inline-bastards">
+						<div>
+							<h3>
+								{{ item.product }}
+							</h3>
+						</div>
+						<div style="margin-left: 1rem;">
+							x {{ item.quantity }}
+						</div>
+						<div style="margin-left: 1rem;">
+							for {{ item.total_price }}
+						</div>
+					</div>
 				</div>
-
-				<div>
-					{% csrf_token %}
-					<input type="submit" value="Send request">
-				</div>
-				
-			</form>
+				{% endfor %}
+			</div>
 		</div>
+		
 	</div>
 {% endblock %}

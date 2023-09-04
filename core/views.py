@@ -10,4 +10,9 @@ def _render(request, template, data):
 # Create your views here.
 def main_page(request):
 	products = Product.published.all().filter(special=True)
-	return _render(request, 'core/main_page.html', {'products': products})
+	order_notification = None
+
+	if 'complete_order' in request.session.keys():
+		del request.session['complete_order']
+		order_notification = 'yes'
+	return _render(request, 'core/main_page.html', {'products': products, 'order_notification': order_notification})

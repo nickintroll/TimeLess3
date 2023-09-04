@@ -14,8 +14,13 @@ def cart_page(request):
 			'override': True
 		})
 
+	message = None
+	if 'empty_cart' in request.session.keys():
+		message = 'empty_cart'
+		del request.session['empty_cart']
 
-	return _render(request, 'cart/cart.html', {'cart': cart})
+
+	return _render(request, 'cart/cart.html', {'cart': cart, 'message': message})
 
 
 @require_POST

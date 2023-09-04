@@ -16,4 +16,9 @@ class ProductSearchForm(forms.Form):
 class OrderCreateForm(forms.ModelForm):
 	class Meta:
 		model = models.Order
-		fields = ['contacts', ]
+		fields = ['contact_number', 'contact_email']
+
+		widgets = {
+			'contact_number': forms.TextInput(attrs={'placeholder': '8 999 7777 777', 'type':'tel', }),
+			'contact_email': forms.TextInput(attrs={'placeholder': 'example@gmail.com'})
+		}

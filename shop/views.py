@@ -14,6 +14,7 @@ def shop_view(request, category_slug=None):
 	categories = Category.published.all()
 	category = None
 	sub_categories = None
+	is_search = None
 
 	# category filtering
 	if category_slug != None:
@@ -52,10 +53,13 @@ def shop_view(request, category_slug=None):
 					price__gte=cd['price_bot']
 				)
 
+			is_search = True
+
 
 	return _render(request, 'shop/shop_main.html', \
 		{
 			'search_form': search_form,
+			'is_search': is_search,
 
 			'category': category, 
 			'sub_categories': sub_categories, 
@@ -72,13 +76,20 @@ def product_detail(request, product_slug):
 
 
 def create_order(request):
+
 	cart = Cart(request)
+	message = None
+
+	if len(cart) == 0:
+		request.session['empty_cart'] = 'YES'
+		return redirect('cart:cart_page')
 
 	if request.method == 'POST':
 		form = OrderCreateForm(request.POST)
 		if form.is_valid():
 			order = form.save()
 			
+
 			for item in cart:
 				OrderItem.objects.create(
 					order=order,
@@ -89,10 +100,17 @@ def create_order(request):
 			cart.clear()
 
 			request.session['complete_order'] = 'YES'
-			# {{ request.session.complete_order }}
 			return redirect('core:main_page')
-	
+
+		field = list(form.errors.keys())[0]
+		message = f'{field}'
+
 	else:
 		form = OrderCreateForm()
 
-	return _render(request, 'order/create_order.html', {'cart': cart, 'form': form})
+
+	return _render(request, 'order/create_order.html', {'cart': cart, 'form': form, 'message': message})
+
+
+def my_order_page(request):
+	pass

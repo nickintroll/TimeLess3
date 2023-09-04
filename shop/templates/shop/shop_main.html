@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block page_title %}
+	{% if category %}
+		{{ category|title }}
+	{% else %}
+		AppleSale Shop
+	{% endif %}
+{% endblock %}
 
 
 {% block content %}  
@@ -43,7 +51,7 @@
 												<div class="four-columns">
 													{% for prod in cat.products.all %}
 														<div>
-															<a href="{{ prod.get_absoult_url }}">
+															<a href="{{ prod.get_absolute_url }}">
 																{{ prod|title }}
 															</a>
 														</div>
@@ -96,7 +104,11 @@
 				<div class="product-item-big white-block">
 					<a href="{{ subcat.get_absolute_url }}">
 						<div class="product-item-big-picture">
-
+							{% if subcat.cover %}
+								<img src="{{ subcat.cover.url }}" alt="">
+							{% else %}
+								<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+							{% endif %}
 						</div>
 						<div>
 							<h3>
@@ -120,7 +132,11 @@
 						<div class="product-item-big white-block">
 							<a href="{{ cat.get_absolute_url }}">
 								<div class="product-item-big-picture">
-
+									{% if cat.cover %}
+										<img src="{{ cat.cover.url }}" alt="">
+									{% else %}
+										<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+									{% endif %}
 								</div>
 								<div>
 									<h3>
@@ -151,14 +167,25 @@
 							<input type="submit" value="search">
 						</div>
 					</div>
-				</form>			
-			</div>	
+				</form>		
+			</div>
+			<div>
+				{% if is_search %}
+				<a href="">
+					Undo search
+				</a>
+				{% endif %}
+			</div>
 
 			<div class="four-columns destroy-grid split-grid">
 				{% for prod in products %}
 					<div class="white-block product-item-big">
 						<div class="product-item-big-picture">
-
+							{% if prod.get_primary_image %}
+								<img src="{{ prod.get_primary_image.file.url }}" alt="">
+							{% else %}
+								<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+							{% endif %}
 						</div>
 						<h3>
 							<a href="{{ prod.get_absolute_url }}">
@@ -168,6 +195,10 @@
 						<div>
 							{{ prod.price }}
 						</div>
+					</div>
+				{% empty %}
+					<div style="margin-top: 1rem;">
+						No results for this request
 					</div>
 				{% endfor %}
 			</div>

@@ -21,6 +21,8 @@ class Category(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	order = models.IntegerField(default=1)
 
+	cover = models.ImageField(upload_to='category_covers/', blank=True, null=True)
+
 	# managers
 	objects = models.Manager()
 	published = PublishedManager()
@@ -124,9 +126,22 @@ class Product(models.Model):
 				is_higher = False
 		return path[::-1]
 
+	def get_primary_image(self):
+		all_pics = self.images.all()
+		prime = all_pics.filter(is_primary=True)
+		
+		if len(prime) == 1:
+			return prime[0]
+		
+		if len(all_pics) == 0:
+			return None
+		else:
+			return self.images.all()[0]
+
+
 class Image(models.Model):
 	product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-	file = models.ImageField()
+	file = models.ImageField(upload_to='products_images/')
 	is_primary = models.BooleanField(default=False)
 
 	def save(self, *args, **kwargs):
@@ -137,7 +152,7 @@ class Image(models.Model):
 		return super().save(*args, **kwargs)
 
 	class Meta:
-		ordering = ('-is_primary', )
+		ordering = ('is_primary', )
 	
 
 ORDER_STATUS_CHOICES = (
@@ -148,7 +163,8 @@ ORDER_STATUS_CHOICES = (
 )
 
 class Order(models.Model):
-	contacts = models.TextField()
+	contact_number = models.CharField(max_length=12)
+	contact_email = models.EmailField(blank=True)
 	# HERE ALSO SHOULD BE SLUG
 	status = models.CharField(choices=ORDER_STATUS_CHOICES, max_length=20)
 	created = models.DateTimeField(auto_now_add=True)

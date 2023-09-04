@@ -2,6 +2,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
+	{% if order_notification %}
+		<div class="message-overall-back" id="message-target">
+			<div class="message-overall">
+				<h2>
+					Your request was sent
+				</h2>
+				<br>
+				<div style="max-width: 50ch;">
+					Our admins will contact you and tell about your order. <br>
+					If you want to check order's status, check page "I left an order". Our admins will change status depending on what stage your order at.
+				</div>
+
+				<div class="message-overall-closer" id="message-but-target">
+					Ok
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var message = document.getElementById('message-but-target');
+			message.onclick = function(e) {
+				document.getElementById('message-target').remove();
+			}
+		</script>
+	{% endif %}
+
+
 	<div class="" style="padding-top: .4rem; background-color: white;">
 		<div class="slide-show-wrapper">
 			<div class="slide-show-item">
