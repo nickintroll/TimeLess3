@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Flower sale</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	<div class="header">
+		<div class="content-width">
+			<div class="six-columns">
+				<div>
+					<a href="{% url 'core:main_page' %}">
+						Flower sale
+					</a>
+				</div>
+				<div>
+					
+				</div>
+				<div class="center-text">
+					<a href="{% url 'shop:shop_main' %}">
+						Products
+					</a>
+				</div>
+				<div class="center-text">
+					Blog
+				</div>
+				<div>
+					
+				</div>
+				<div>
+					Profile
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div>
+		{% block content %}
+		{% endblock %}
+	</div>
+	<div>
+		
+	</div>
+</body>
+</html>

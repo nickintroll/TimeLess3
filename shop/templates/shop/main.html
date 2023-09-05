@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="subheader">
+	<div class="content-width">
+		<div class="eight-columns">
+			<div>
+				<a href="{% url 'shop:shop_main' %}">
+					All products
+				</a>
+		
+			</div>
+
+			{% for cat in categories %}
+				{% if not cat.parent_category %}
+					<div style="padding-left: 1rem;">
+						<a href="{{ cat.get_absolute_url }}">
+							{{ cat }}
+						</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+
+		</div>
+	</div>
+</div>
+<div class="content-width" style="margin-top: 2rem;">
+	
+	{% if category %}
+		<h5 class="fade-text">
+			{% if category.parent_category %}
+				{% for item in category.get_path_to_cat %}
+					> <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+				{% endfor %}
+			{% endif %}
+		</h5>
+		<div>
+			<h2>
+				{{ category|title }}
+			</h2>
+		</div>
+		<div class="inline-bastards">
+			{% for cat in sub_categories %}
+				<div class="white-block center-text">
+					<h5 class="fade-text">
+						<a href="{{ cat.get_absolute_url }}">
+							{{ cat }}
+						</a>
+					</h5>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<h2>
+			<a href="{% url 'shop:shop_main' %}">
+				All products
+			</a>
+		</h2>
+	{% endif %}
+	<div>
+		<form>
+			<div class="inline-bastards">
+				<div>
+					{{ search_form.query }}	
+				</div>
+				<div>
+					<input type="submit" value="Search">
+				</div>
+	
+			</div>
+		</form>
+	</div>
+	<div class="four-columns split-grid destroy-grid">
+		{% for product in products %}
+			<div class="white-block">
+				<div class="fit-img-wrapper">
+					<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+				</div>
+				<h4>
+					<a href="{{ product.get_absolute_url }}">
+						{{ product }}
+					</a>	
+				</h4>
+				<div>
+					description
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
