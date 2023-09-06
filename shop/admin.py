@@ -14,6 +14,15 @@ class ImageProductInline(admin.TabularInline):
 	model = models.Image
 	raw_id_fields = ['product']
 
+@admin.register(models.ProductParameter)
+class ProductParameterAdmin(admin.ModelAdmin):
+	list_display = ['name', 'value']
+
+
+# class ProductParametersInline(admin.TabularInline):
+	# model = models.ProductParameter
+	# raw_id_fields = ['product']
+
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -33,8 +42,7 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
-	list_display = ['id', 'created', 'status']
-	list_filter = ['status']
+	list_display = ['id', 'created', 'status', 'contact_number', 'contact_email']
+	list_filter = ['status', ]
 	inlines = [OrderItemInline]
-
-
+	

@@ -66,8 +66,13 @@
 		{% for item in cart %}
 		
 			{% with item.product as prod %}
-				<div>
+				<div class="three-columns">
+					<div class="image-fit-wrapper" style="padding: 0;">
+						<img src="{{ prod.get_primary_image.file.url }}" alt="">
+					</div>
+					<div class="span-two">
 						<a href="{{ prod.get_absolute_url }}">{{ prod }}</a>
+					</div>
 				</div>
 				<div>
 					{{ item.price }}

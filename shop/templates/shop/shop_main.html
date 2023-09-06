@@ -13,14 +13,58 @@
 {% block content %}  
 		<div class="sub-header">
 			<div class="content-width">
-				<div class="twelve-columns">
+				<!-- HEADER FOR THIN -->
+				<div class="phone-only" style="text-align: center;">
+					<div class="sub-header-item">
+						=
+						<div class="sub-header-open-up">
+							{% for cat in categories %}
+								{% if not cat.parent_category %}
+									<div class="white-block" style="border-bottom: 1px solid rgb(199, 199, 199);">
+										<h2>
+											<a href="{{ cat.get_absolute_url }}">
+												 {{ cat|title }}
+											</a>
+										</h2>
+										<div class="inline-bastards">
+											<h5>
+												{% for sub in cat.subcategories.all %}
+													{{ sub }}
+												{% endfor %}
+											</h5>
+										</div>
+
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<script>
+					var thing = document.getElementsByClassName('sub-header-item')[0];
+					var menu = thing.getElementsByClassName('sub-header-open-up')[0];
+					thing.onclick = function(event) {
+						let state = menu.style['visibility'];
+						console.log(state)
+						if (state=='hidden'||state=='') {
+							menu.style['visibility'] = 'initial';
+						} else{
+							menu.style['visibility'] = 'hidden';
+						}
+					}
+				</script>
+
+				<!-- HEADER FOR WIDE -->
+				<div class="twelve-columns phone-hide">
 					<div class="sub-header-item">
 						<a href="{% url 'shop:shop_main' %}">
 							All products
 						</a>	
 					</div>
-					<div></div>
-					<div></div>
+					<div>
+					</div>
+					<div class="phone-hide" ></div>
+					<div class="phone-hide" ></div>
 		
 					{% for cat in categories %}
 						{% if not cat.parent_category %}
@@ -206,3 +250,4 @@
 	</div>
 
 {% endblock %}
+

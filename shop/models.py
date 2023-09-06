@@ -51,10 +51,6 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 	
-	class Meta:
-		ordering = ('-order', 'created', )
-
-
 	def get_path_to_cat(self):
 		if self.parent_category != None:
 			path = [self, ]
@@ -138,6 +134,21 @@ class Product(models.Model):
 		else:
 			return self.images.all()[0]
 
+class ProductParameter(models.Model):
+	product = models.ManyToManyField(to=Product, related_name='parameters')
+	name = models.CharField(max_length=90)
+	value = models.CharField(max_length=120)
+	
+
+	def __str__(self):
+		return self.name
+	
+	def get_analogs(self, product__name):
+		res = ProductParameter.objects.all().filter(name=self.name, product__name=product_name)
+		return res 
+
+
+
 
 class Image(models.Model):
 	product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
@@ -165,7 +176,7 @@ ORDER_STATUS_CHOICES = (
 class Order(models.Model):
 	contact_number = models.CharField(max_length=12)
 	contact_email = models.EmailField(blank=True)
-	# HERE ALSO SHOULD BE SLUG
+	# HERE ALSO SHOULD BE A SLUG or not if we just show 
 	status = models.CharField(choices=ORDER_STATUS_CHOICES, max_length=20)
 	created = models.DateTimeField(auto_now_add=True)
 
@@ -191,6 +202,5 @@ class OrderItem(models.Model):
 	
 	def get_cost(self):
 		return self.product.price * self.quantity
-
 
 

@@ -12,9 +12,6 @@
 				<h2>
 					Sending order
 				</h2>
-				{% if message %}
-					Field {{ message }} has an issue
-				{% endif %}
 		
 				<div style="margin-top: 2rem;">
 					<form method="post">
@@ -24,6 +21,12 @@
 						<div>
 							Please fill out your contact information so we can contact you about the order.
 						</div>
+						{% if message %}
+							<div class="error-message">
+								Field "{{ message }}" has an issue
+							</div>
+						{% endif %}
+		
 						<div>
 							{{ form.contact_number }}
 						</div>
@@ -39,24 +42,58 @@
 					</form>
 				</div>
 			</div>
-			<div>
-				{% for item in cart %}
-				<div class="white-block push">
-					<div class="inline-bastards">
+			<div class="white-block">
+				<div style="border-bottom: 1px solid gray;">
+					<div class="three-columns">
 						<div>
-							<h3>
-								{{ item.product }}
-							</h3>
+							<h4>
+								Наименование
+							</h4>
 						</div>
-						<div style="margin-left: 1rem;">
-							x {{ item.quantity }}
+						<div>
+							<h4>
+								Кол-во
+							</h4>
 						</div>
-						<div style="margin-left: 1rem;">
-							for {{ item.total_price }}
+						<div>
+							<h4>
+								Цена за все
+							</h4>
+						</div>
+					</div>
+				</div>
+
+				{% for item in cart %}
+				<div class="push">
+					<div class="three-columns">
+						<div>
+							{{ item.product|title }}
+						</div>
+						<div>
+							x{{ item.quantity }}
+						</div>
+						<div>
+							{{ item.total_price }}
 						</div>
 					</div>
 				</div>
 				{% endfor %}
+				<br>
+				<div class="push">
+					<div class="three-columns">
+						<div>
+							<h3>
+								Всего
+							</h3>
+						</div>
+						<div>
+						</div>
+						<div>
+							{{ cart.get_total_price }}
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 		

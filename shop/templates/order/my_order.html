@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+	My order
+{% endblock %}
+
+{% block content %}
+	<div class="content-width" style="margin-top: 2rem;">
+		<div>
+			<h2>
+				Get status on your order
+			</h2>
+			<br>
+			<div>
+				Type in contact information that you've set when created order
+			</div>
+
+			<div>
+				<form method="post">
+					{{ form.contact_number }}
+					{{ form.contact_email }}
+					{% csrf_token %}
+					<input type="submit" value="Find">	
+				</form>
+			</div>
+			<br>
+
+			<div>
+				{% if results %}
+					<div class="three-columns ">
+						<div class="white-block">
+							<h5>
+								Created date
+							</h5>
+						</div>
+						<div class="white-block">
+							<h5>
+								Total Price
+							</h5>
+						</div>
+						<div class="white-block">
+							<h5>
+								Order's status
+							</h5>
+						</div>
+					</div>
+
+					{% for order in orders %}
+						<div class="three-columns ">
+							<div class="white-block">
+								<h4>
+									{{ order.created }}
+								</h4>
+							</div>
+							<div class="white-block">
+								{{ order.get_total_summ }}
+							</div>
+							<div class="white-block">
+								{{ order.status }}
+							</div>
+						</div>
+					{% empty %}
+						No results for this contact information
+					{% endfor %}
+				{% else %}
+						Enter your info
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

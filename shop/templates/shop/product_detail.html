@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tags %}
 
 
 {% block page_title %}
@@ -8,60 +9,71 @@
 
 
 {% block content %}
-<div class="content-width">
-	<div class="product_path">
+<div class="content-width" style="margin-top: 2rem;">
+	<div class="product_path fade-text">
 		{% for item in product.get_path_to_prod %}
 			<a href="{{ item.get_absolute_url }}">
-				> {{ item.name }} 
+				/ {{ item.name }} 
 			</a>
 		{% endfor %}
 	</div>
 	
-
-	<h2 class="dark-color">
-		<a href="{{ product.get_absolute_url }}">{{ product }}</a>
-	</h2>
+	<div class="two-columns destroy-grid" style="margin-top: 1rem;">
+		<div class="five-columns">
+			<div class="product-images-line">
+				<div>
+					{% for img in product.images.all %}
+						<div class="image-fit-wrapper">
+							<img src="{{ img.file.url }}" alt="">
+						</div>
+		
+					{% endfor %}
+				</div>	
 	
-	<div class="two-columns">
-		<div class="image-fit-wrapper">
-			{% if product.get_primary_image %}
-				<img src="{{ product.get_primary_image.file.url }}" alt="">
-			{% else %}
-				<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
-			{% endif %}
-		</div>
-		<div class="white-block">
-			<h4 class="dark-color">
-				Choose option for you
-			</h4>
-			<div>
-				some choosing of parametsrs
+			</div>
+			<div class="image-fit-wrapper white-block span-four" style="padding: 3rem;">
+				{% if product.get_primary_image %}
+					<img src="{{ product.get_primary_image.file.url }}" alt="">
+				{% else %}
+					<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+				{% endif %}
 			</div>
 		</div>
-		<div class="span-two">
-			<div class="five-columns">
-				{% for img in product.images.all %}
-					<div class="image-fit-wrapper">
-						<img src="{{ img.file.url }}" alt="">
+		<div class="product-options-field">
+			<h1 class="dark-color">
+				<a href="{{ product.get_absolute_url }}" class="dark-color">{{ product }}</a>
+			</h1>
+			<div>
+				{% for parameter in product.parameters.all %}
+					<div>
+						{{ parameter }}:{{ parameter.value }}
 					</div>
-	
+					<div>
+						Length: 
+						{% for par in parameter|get_analogs:product %}
+						<a href="{{ par.product.get_absolute_url }}">
+							{{ par.parameter.value }}
+						</a>
+						{% endfor %}
+					</div>
 				{% endfor %}
-			</div>	
-
+			</div>
+			<div style="margin-top: 1rem;">
+				<form action="{% url 'cart:cart_add' product.id %}" method="post">
+					<h2>
+						{{ product.price }}₽ x {{ add_form.quantity }}
+					</h2>
+					<div>
+						{% csrf_token %}
+						<input type="submit" value="Добавить в корзину" class="big-buy-button specal-text">
+					</div>
+				</form>
+	
+			</div>
 		</div>
 
 		<div style="padding-top: .4rem;">
 			here is big description
-		</div>
-		<div>
-			<div class="float-right">
-				<form action="{% url 'cart:cart_add' product.id %}" method="post">
-					{{ add_form.quantity }}
-					{% csrf_token %}
-					<input type="submit" value="Buy">
-	
-				</form>
-			</div>
 		</div>
 
 	</div>

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.postgres.search import SearchVector
 
 from core.views import _render
-from .models import Category, Product, OrderItem
+from .models import Category, Product, OrderItem, Order
 from .forms import ProductSearchForm, OrderCreateForm
 from cart.forms import CartAddForm
 from cart.cart import Cart
@@ -77,6 +77,11 @@ def product_detail(request, product_slug):
 
 def create_order(request):
 
+	trans_dict = {
+		'contact_email': 'email',
+		'contact_number': 'Phone number'
+	}
+
 	cart = Cart(request)
 	message = None
 
@@ -103,7 +108,7 @@ def create_order(request):
 			return redirect('core:main_page')
 
 		field = list(form.errors.keys())[0]
-		message = f'{field}'
+		message = trans_dict[f'{field}']
 
 	else:
 		form = OrderCreateForm()
@@ -113,4 +118,15 @@ def create_order(request):
 
 
 def my_order_page(request):
-	pass
+	results = False
+	orders = None
+	form = OrderCreateForm()
+	
+	if request.method == 'POST':
+		form = OrderCreateForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
+			results = True
+			orders = Order.objects.all().filter(contact_number=cd['contact_number'], contact_email=cd['contact_email'])
+	
+	return _render(request, 'order/my_order.html', {'orders': orders, 'form': form, 'results': results})

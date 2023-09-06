@@ -51,7 +51,7 @@
 		<h2>
 			Products
 		</h2>
-		<div class="big-prod-grid">
+		<div class="four-columns split-grid">
 			{% for prod in products|slice:4 %}
 			<div>
 				<a href="{{ prod.get_absolute_url }}">
@@ -72,9 +72,6 @@
 				</a>
 			</div>
 			{% endfor %}
-			<div class="span-four" style="text-align: center;">
-				More
-			</div>
 		</div>
 		
 		...
