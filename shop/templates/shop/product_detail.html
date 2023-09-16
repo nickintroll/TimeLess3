@@ -11,6 +11,7 @@
 {% block content %}
 <div class="content-width" style="margin-top: 2rem;">
 	<div class="product_path fade-text">
+		<a href="/shop/">Home</a>
 		{% for item in product.get_path_to_prod %}
 			<a href="{{ item.get_absolute_url }}">
 				/ {{ item.name }} 
@@ -19,49 +20,63 @@
 	</div>
 	
 	<div class="two-columns destroy-grid" style="margin-top: 1rem;">
-		<div class="five-columns">
+		<div class="five-columns white-block">
 			<div class="product-images-line">
 				<div>
 					{% for img in product.images.all %}
 						<div class="image-fit-wrapper">
-							<img src="{{ img.file.url }}" alt="">
+							<img src="{{ img.file.url }}" alt="" class="placeable-images">
 						</div>
 		
 					{% endfor %}
 				</div>	
 	
 			</div>
-			<div class="image-fit-wrapper white-block span-four" style="padding: 3rem;">
+			<div class="image-fit-wrapper span-four big-image wierd-holder" >
+				<div class="wierd-but" id="right-but">
+					>
+				</div>
+				<div class="wierd-but" id="left-but">
+					<
+				</div>
 				{% if product.get_primary_image %}
-					<img src="{{ product.get_primary_image.file.url }}" alt="">
+					<img src="{{ product.get_primary_image.file.url }}" alt="" id="product-image">
 				{% else %}
 					<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
 				{% endif %}
 			</div>
 		</div>
-		<div class="product-options-field">
+		<div class="product-options-field ">
 			<h1 class="dark-color">
-				<a href="{{ product.get_absolute_url }}" class="dark-color">{{ product }}</a>
+				<a href="{{ product.get_absolute_url }}" class="dark-color">{{ product|title }}</a>
 			</h1>
-			<div>
+			<br>
+			<div class="five-columns ">
 				{% for parameter in product.parameters.all %}
-					<div>
-						{{ parameter }}:{{ parameter.value }}
+					<div style="line-height: 2.8rem;">
+						<h4>
+							{{ parameter.name|title }}: 						
+						</h4>
 					</div>
-					<div>
-						Length: 
+					
+					<div class="span-four ">
 						{% for par in parameter|get_analogs:product %}
-						<a href="{{ par.product.get_absolute_url }}">
-							{{ par.parameter.value }}
-						</a>
+							<a href="{{ par.product.get_absolute_url }}" class="parameter-option {% if product == par.product %}selected{% endif %}" style="{% if par.parameter.name == 'Цвет' %}background-color: {{ par.parameter.value }} {% endif %}">
+								{% if par.parameter.name != 'Цвет' %}
+									{{ par.parameter.value }}
+								{% endif %}
+							</a>
 						{% endfor %}
+
 					</div>
 				{% endfor %}
 			</div>
+			<br>
+			<br>
 			<div style="margin-top: 1rem;">
 				<form action="{% url 'cart:cart_add' product.id %}" method="post">
 					<h2>
-						{{ product.price }}₽ x {{ add_form.quantity }}
+						{{ product.get_price }}₽ x {{ add_form.quantity }}
 					</h2>
 					<div>
 						{% csrf_token %}
@@ -71,21 +86,97 @@
 	
 			</div>
 		</div>
+		<div style="margin-top: 4rem;">
+			<h3>From same category:</h3>
+			<div class="three-columns">
+				{% for prod in  product.category.products.all|slice:4 %}
+				<div class="subheader-prod-item" style="text-align: center;">
+					<div class="image-fit-wrapper">
+						<img src="{{ prod.get_primary_image.file.url }}" alt="">
+					</div>
+					<h4>
+						<a href="{{ prod.get_absolute_url }}">
+							{{ prod|title|truncatechars:42 }}
+						</a>	
+					</h4>
+					<div>
+						<h4 class="specal-text">
+							{{ prod.get_price }}p
+						</h4>
+					</div>
+					<br>
+					<a href="{{ prod.get_absolute_url }}">
+						<span class="prod-button-small" >
+							Подробнее
+						</span>
+					
+					</a>
+				</div>
+			{% endfor %}
 
-		<div style="padding-top: .4rem;">
-			here is big description
+			</div>
+		
 		</div>
-
-	</div>
-	<div>
-		from save category:
-		{% for prod in  product.category.products.all|slice:4 %}
-		<div>
-			<a href="{{ prod.get_absolute_url }}">{{ prod }}</a>
-		</div>
-		{% endfor %}
 	
+		<div style="margin-top: 4rem;">
+			<h2>
+				Specs
+			</h2>
+			<div class="five-columns">
+				{% for item in product.specs.all %}
+				<div class="spec-name">
+					<h4>
+						{{ item.name }}
+					</h4>
+				</div>
+				<div class="span-four spec-value">
+					{{ item.value|linebreaks }}
+				</div>
+			{% endfor %}
+
+			</div>
+		</div>
+
 	</div>
 </div>
 
+{% endblock %}
+
+{% block afterbody %}
+	<script>
+		var main_image = document.getElementById('product-image');
+		var images = document.getElementsByClassName('placeable-images');
+		
+		var image_sources = [];
+		var c = 0;
+
+		for (let i=0; i<images.length;i++) {
+			let img = images[i];
+			image_sources.push(img.src);
+			img.onclick = function(event){
+				let src = event.target.src;
+				main_image.src = src
+			}
+		}
+		
+		var right_but = document.getElementById('right-but');
+		var left_but = document.getElementById('left-but');
+		
+		right_but.onclick = function(event){
+			if (c == image_sources.length-1) {
+				c = -1
+			}
+			c += 1
+			main_image.src = image_sources[c];
+		}
+		left_but.onclick = function(event){
+			if (c == 0) {
+				c = image_sources.length
+			}
+			c -= 1
+			main_image.src = image_sources[c];
+		}
+
+
+	</script>	
 {% endblock %}

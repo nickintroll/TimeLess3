@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.postgres.search import SearchVector
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
-from core.views import _render
+from core.views import _render, is_ajax
 from .models import Category, Product, OrderItem, Order
 from .forms import ProductSearchForm, OrderCreateForm
 from cart.forms import CartAddForm
@@ -55,6 +57,21 @@ def shop_view(request, category_slug=None):
 
 			is_search = True
 
+	# PAGINATOR LOGIC
+	paginator = Paginator(products, 16)
+	page = request.GET.get('page')
+
+	try:
+		products = paginator.page(page)
+	except PageNotAnInteger:
+		products = paginator.page(1)
+	except EmptyPage:
+		if is_ajax(request):
+			return HttpResponse('')
+		products = paginator.page(paginator.num_pages)
+
+	if is_ajax(request):
+		return _render(request,'shop/prods_ajax.html', {'products': products})
 
 	return _render(request, 'shop/shop_main.html', \
 		{

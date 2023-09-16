@@ -93,10 +93,27 @@
 											</div>
 											<div class="span-four">
 												<div class="four-columns">
-													{% for prod in cat.products.all %}
-														<div>
+													{% for prod in cat.products.all|slice:":7" %}
+														<div class="subheader-prod-item" style="text-align: center;">
+															<div class="image-fit-wrapper">
+																<img src="{{ prod.get_primary_image.file.url }}" alt="">
+															</div>
+															<h4>
+																<a href="{{ prod.get_absolute_url }}">
+																	{{ prod|title|truncatechars:42 }}
+																</a>	
+															</h4>
+															<div>
+																<h4 class="specal-text">
+																	{{ prod.get_price }}p
+																</h4>
+															</div>
+															<br>
 															<a href="{{ prod.get_absolute_url }}">
-																{{ prod|title }}
+																<span class="prod-button-small" >
+																	Подробнее
+																</span>
+	
 															</a>
 														</div>
 													{% endfor %}
@@ -129,9 +146,14 @@
 		{% if category %}
 			
 			<div class="inline-bastards">
+				<div>
+					<h5 class="fade-text">
+						<a href="/shop/"> / Home</a>
+					</h5>
+				</div>
 				{% for path_point in category.get_path_to_cat %}
 					<div>
-						<h5>
+						<h5 class="fade-text">
 							<a href="{{ path_point.get_absolute_url }}">
 								> {{ path_point.name }}
 							</a>
@@ -139,10 +161,11 @@
 					</div>
 				{% endfor %}
 			</div>
-			
-			<h2>
+			<h1>
 				<a href="{{ category.get_absolute_url }}">{{ category|title }}</a>
-			</h2>
+			</h1>
+			<br>
+			<br>
 			<div class="four-columns destroy-grid split-grid">
 				{% for subcat in sub_categories %}
 				<div class="product-item-big white-block">
@@ -221,9 +244,17 @@
 				{% endif %}
 			</div>
 
-			<div class="four-columns destroy-grid split-grid">
+			<div class="four-columns destroy-grid split-grid" id="products-list">
 				{% for prod in products %}
-					<div class="white-block product-item-big">
+					<div class="product-item-big">
+						<h5>
+							<a href="{{ prod.category.get_absolute_url }}">
+								<div class="fun-text" style="text-align: left;">
+									/{{ prod.category }}
+								</div>	
+							</a>	
+						</h5>
+	
 						<div class="product-item-big-picture">
 							{% if prod.get_primary_image %}
 								<img src="{{ prod.get_primary_image.file.url }}" alt="">
@@ -233,11 +264,30 @@
 						</div>
 						<h3>
 							<a href="{{ prod.get_absolute_url }}">
-								{{ prod|title }}
+								{{ prod|title|truncatechars:50 }}
 							</a>
 						</h3>
-						<div>
-							{{ prod.price }}
+						<div style="margin-top: .5rem;">
+							{% if prod.price %}
+								<h3>
+									<span class="specal-text">
+										{{ prod.get_price }}p
+									</span>
+
+								</h3>
+							{% else %}
+								<h3 class="specal-text">
+									Not available
+								</h3>
+							{% endif %}
+						</div>
+						<div class="product-item-button-space">
+							<a href="{{ prod.get_absolute_url }}">
+								<div class="prod-button-big">
+									Подробнее
+								</div>
+	
+							</a>
 						</div>
 					</div>
 				{% empty %}
@@ -249,5 +299,33 @@
 		</div>
 	</div>
 
+{% endblock %}
+
+{% block afterbody %}
+	<script language="JavaScript" type="text/javascript" src="{% static '/js/jquery-1.2.6.min.js' %}"></script>
+	<script>
+		var page = 1;
+		var empty_page = false;
+		var block_request = false;
+		var jobs_list = document.getElementById('products-list')
+
+		window.onscroll = function () { 
+			var margin = document.body.scrollHeight - window.innerHeight - 100;
+			if (pageYOffset > margin && empty_page == false && block_request == false) {
+				block_request = true;
+				page += 1;			
+
+
+				$.get('?page=' + page, function(data) {
+					if (data == '') {
+						empty_page=true;
+					} else {
+						block_request = false;
+						jobs_list.innerHTML += data;
+					}
+				});
+			};
+			};
+	</script>
 {% endblock %}
 

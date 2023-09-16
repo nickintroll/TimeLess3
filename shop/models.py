@@ -13,7 +13,7 @@ class Category(models.Model):
 	slug = models.SlugField(max_length=155, blank=True, null=True)
 	parent_category = models.ForeignKey(
 		'Category', related_name='subcategories', 
-		on_delete=models.DO_NOTHING,
+		on_delete=models.CASCADE,
 		blank=True, null=True)
 	
 	special = models.BooleanField(default=False)
@@ -134,10 +134,24 @@ class Product(models.Model):
 		else:
 			return self.images.all()[0]
 
+	def get_price(self):
+		res = ''
+		price = str(int(self.price))[::-1]
+		c, q = 0, 0
+		for i in price:
+			c += 1
+			if c % 3 == 0:
+				q = c
+				res += price[c-3:c] + ' '
+		if q != 0:
+			res += price[q:]
+
+		return res[::-1]
+
 class ProductParameter(models.Model):
 	product = models.ManyToManyField(to=Product, related_name='parameters')
 	name = models.CharField(max_length=90)
-	value = models.CharField(max_length=120)
+	value = models.TextField()
 	
 
 	def __str__(self):
@@ -204,3 +218,7 @@ class OrderItem(models.Model):
 		return self.product.price * self.quantity
 
 
+class Spec(models.Model):
+	product = models.ForeignKey(Product, related_name='specs', on_delete=models.CASCADE)
+	name = models.CharField(max_length=80)
+	value = models.TextField()

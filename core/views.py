@@ -6,6 +6,10 @@ def _render(request, template, data):
 	data['all_categories'] = Category.published.all().filter(special=True)
 	return render(request, template, data)
 
+def is_ajax(request):
+	return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 
 # Create your views here.
 def main_page(request):

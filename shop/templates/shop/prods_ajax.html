@@ -1,0 +1,24 @@
+{% load static %}
+{% for prod in products %}
+	<div class="white-block product-item-big">
+		<div class="product-item-big-picture">
+			{% if prod.get_primary_image %}
+				<img src="{{ prod.get_primary_image.file.url }}" alt="">
+			{% else %}
+				<img src="{% static 'imgs/placeholder.jpg' %}" alt="">
+			{% endif %}
+		</div>
+		<h3>
+			<a href="{{ prod.get_absolute_url }}">
+				{{ prod|title }}
+			</a>
+		</h3>
+		<div>
+			{{ prod.price }}
+		</div>
+	</div>
+{% empty %}
+	<div style="margin-top: 1rem;">
+		No results for this request
+	</div>
+{% endfor %}
